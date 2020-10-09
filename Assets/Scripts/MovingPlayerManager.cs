@@ -81,7 +81,7 @@ public class MovingPlayerManager : MonoBehaviour
 				if (obj)
 				{
 					GridStats gridStats = obj.GetComponent<GridStats>();
-					if (gridStats.visited == step - 1)
+					if (gridStats.visited == step - 1 && !gridStats.isBlocked)
 					{
 						TestFourDirection(gridStats.x, gridStats.y, step);
 					}
@@ -150,7 +150,7 @@ public class MovingPlayerManager : MonoBehaviour
 		switch (direction)
 		{
 			case 4:
-				if (x - 1 > -1 && gridArray[x - 1, y] && gridArray[x - 1, y].GetComponent<GridStats>().visited == step)
+				if (x - 1 > -1 && gridArray[x - 1, y] && IsCorrectCell(gridArray[x - 1, y].GetComponent<GridStats>(), step))
 				{
 					return true;
 				}
@@ -159,7 +159,7 @@ public class MovingPlayerManager : MonoBehaviour
 					return false;
 				}
 			case 3:
-				if (y - 1 > -1 && gridArray[x, y - 1] && gridArray[x, y - 1].GetComponent<GridStats>().visited == step)
+				if (y - 1 > -1 && gridArray[x, y - 1] && IsCorrectCell(gridArray[x, y - 1].GetComponent<GridStats>(), step))
 				{
 					return true;
 				}
@@ -168,7 +168,7 @@ public class MovingPlayerManager : MonoBehaviour
 					return false;
 				}
 			case 2:
-				if (x + 1 < columns && gridArray[x + 1, y] && gridArray[x + 1, y].GetComponent<GridStats>().visited == step)
+				if (x + 1 < columns && gridArray[x + 1, y] && IsCorrectCell(gridArray[x + 1, y].GetComponent<GridStats>(), step))
 				{
 					return true;
 				}
@@ -177,7 +177,7 @@ public class MovingPlayerManager : MonoBehaviour
 					return false;
 				}
 			case 1:
-				if (y + 1 < rows && gridArray[x, y + 1] && gridArray[x, y + 1].GetComponent<GridStats>().visited == step)
+				if (y + 1 < rows && gridArray[x, y + 1] && IsCorrectCell(gridArray[x, y + 1].GetComponent<GridStats>(), step))
 				{
 					return true;
 				}
@@ -187,6 +187,18 @@ public class MovingPlayerManager : MonoBehaviour
 				}
 		}
 		return false;
+	}
+
+	private bool IsCorrectCell(GridStats grid, int step)
+	{
+		if (grid.visited == step && !grid.isBlocked)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	private void TestFourDirection(int x, int y, int step)
